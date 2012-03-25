@@ -110,15 +110,35 @@ void DShowApp::mouseDown( MouseEvent event )
 
 void DShowApp::keyDown( KeyEvent event )
 {
-	if( event.getChar() == 'f' ) {
+	switch( event.getChar() ) {
+	case 'f':
 		setFullScreen( ! isFullScreen() );
-	}
-	else if( event.getChar() == 'o' ) {
-		CloseGraph();
-		fs::path moviePath = getOpenFilePath();
-		if( ! moviePath.empty() ) {
-			StartGraph( moviePath );
+		break;
+
+	case 'o':
+		{
+			CloseGraph();
+			fs::path moviePath = getOpenFilePath();
+			if( ! moviePath.empty() ) {
+				StartGraph( moviePath );
+			}
 		}
+		break;
+
+	case ' ': 
+		if( g_mediaControl != NULL ) {
+			LONG msTimeout = 0;
+			OAFilterState pfs;
+
+			if( SUCCEEDED( g_mediaControl->GetState( msTimeout, &pfs ) ) ) {
+				if( pfs == State_Running )
+					g_mediaControl->Pause();
+				else 
+					g_mediaControl->Run();
+			}
+		}
+		break;
+
 	}
 }
 
