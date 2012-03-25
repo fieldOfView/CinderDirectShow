@@ -72,6 +72,7 @@ class DShowApp : public AppBasic {
 	SmartPtr<IMediaEvent>            g_mediaEvent;
 	SmartPtr<IMediaSeeking>          g_mediaSeeking;
 	SmartPtr<IVMRSurfaceAllocator9>  g_allocator;
+	SmartPtr<IVideoFrameStep>        g_videoFrameStep;
 };
 
 void DShowApp::setup()
@@ -95,6 +96,7 @@ void DShowApp::setup()
 	g_mediaEvent   = NULL;
     g_mediaControl = NULL;
 	g_mediaSeeking = NULL;
+	g_videoFrameStep    = NULL;
     g_filter       = NULL;        
     g_graph        = NULL;
 }
@@ -110,12 +112,12 @@ void DShowApp::mouseDown( MouseEvent event )
 
 void DShowApp::keyDown( KeyEvent event )
 {
-	switch( event.getChar() ) {
-	case 'f':
+	switch( event.getCode() ) {
+	case KeyEvent::KEY_f:
 		setFullScreen( ! isFullScreen() );
 		break;
 
-	case 'o':
+	case KeyEvent::KEY_o:
 		{
 			CloseGraph();
 			fs::path moviePath = getOpenFilePath();
@@ -125,16 +127,28 @@ void DShowApp::keyDown( KeyEvent event )
 		}
 		break;
 
-	case ' ': 
+	case KeyEvent::KEY_SPACE: 
 		if( g_mediaControl != NULL ) {
-			LONG msTimeout = 0;
 			OAFilterState pfs;
 
-			if( SUCCEEDED( g_mediaControl->GetState( msTimeout, &pfs ) ) ) {
+			if( SUCCEEDED( g_mediaControl->GetState( 0, &pfs ) ) ) {
 				if( pfs == State_Running )
 					g_mediaControl->Pause();
 				else 
 					g_mediaControl->Run();
+			}
+		}
+		break;
+
+	case KeyEvent::KEY_RIGHT:
+		if( g_mediaControl != NULL && g_videoFrameStep != NULL ) {
+			OAFilterState pfs;
+
+			if( SUCCEEDED( g_mediaControl->GetState( 0, &pfs ) ) ) {
+				if( pfs == State_Running )
+					g_mediaControl->Pause();
+
+				g_videoFrameStep->Step( 1, NULL );
 			}
 		}
 		break;
@@ -247,6 +261,7 @@ HRESULT DShowApp::CloseGraph()
 	g_mediaEvent   = NULL;
     g_mediaControl = NULL; 
 	g_mediaSeeking = NULL;
+	g_videoFrameStep    = NULL;
     g_filter       = NULL;        
     g_graph        = NULL;
     ::InvalidateRect( mHwnd, NULL, true );
@@ -317,6 +332,11 @@ HRESULT DShowApp::StartGraph( fs::path path )
     {
         hr = g_graph->QueryInterface(IID_IMediaSeeking, reinterpret_cast<void**>(&g_mediaSeeking));
     }
+
+	if (SUCCEEDED(hr))
+	{
+		hr = g_graph->QueryInterface(IID_IVideoFrameStep, reinterpret_cast<void**>(&g_videoFrameStep));
+	}
 
 	if (SUCCEEDED(hr))
     {
