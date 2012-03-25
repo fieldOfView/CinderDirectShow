@@ -69,6 +69,8 @@ class DShowApp : public AppBasic {
 	SmartPtr<IGraphBuilder>          g_graph;
 	SmartPtr<IBaseFilter>            g_filter;
 	SmartPtr<IMediaControl>          g_mediaControl;
+	SmartPtr<IMediaEvent>            g_mediaEvent;
+	SmartPtr<IMediaSeeking>          g_mediaSeeking;
 	SmartPtr<IVMRSurfaceAllocator9>  g_allocator;
 };
 
@@ -88,6 +90,13 @@ void DShowApp::setup()
 
 	mFrameTexture = gl::Texture();
 	mFrameReady = false;
+
+    g_allocator    = NULL;        
+	g_mediaEvent   = NULL;
+    g_mediaControl = NULL;
+	g_mediaSeeking = NULL;
+    g_filter       = NULL;        
+    g_graph        = NULL;
 }
 
 void DShowApp::shutdown()
@@ -123,6 +132,26 @@ void DShowApp::update()
 	}
 	mFrameReady = false;
 	
+	if( g_mediaEvent != NULL ) {
+		long lEventCode;
+		LONG lParam1;
+		LONG lParam2;
+		
+		while ( SUCCEEDED( g_mediaEvent->GetEvent(&lEventCode, &lParam1, &lParam2, 0) ) ) {
+			console() << lEventCode << endl;
+			switch( lEventCode ) {
+			case EC_COMPLETE:
+				// Completed video playback
+
+				LONGLONG Time = 0;
+				g_mediaSeeking->SetPositions(&Time, AM_SEEKING_AbsolutePositioning, NULL, AM_SEEKING_NoPositioning);
+
+				break;
+			}
+			
+			g_mediaEvent->FreeEventParams(lEventCode, lParam1, lParam2);
+		}
+	}
 }
 
 void DShowApp::draw()
@@ -195,7 +224,9 @@ HRESULT DShowApp::CloseGraph()
 #endif
 
     g_allocator    = NULL;        
-    g_mediaControl = NULL;        
+	g_mediaEvent   = NULL;
+    g_mediaControl = NULL; 
+	g_mediaSeeking = NULL;
     g_filter       = NULL;        
     g_graph        = NULL;
     ::InvalidateRect( mHwnd, NULL, true );
@@ -258,6 +289,16 @@ HRESULT DShowApp::StartGraph( fs::path path )
     }
 
     if (SUCCEEDED(hr))
+    {
+        hr = g_graph->QueryInterface(IID_IMediaEvent, reinterpret_cast<void**>(&g_mediaEvent));
+    }
+
+    if (SUCCEEDED(hr))
+    {
+        hr = g_graph->QueryInterface(IID_IMediaSeeking, reinterpret_cast<void**>(&g_mediaSeeking));
+    }
+
+	if (SUCCEEDED(hr))
     {
         hr = g_graph->RenderFile( path.c_str(), NULL );
     }
