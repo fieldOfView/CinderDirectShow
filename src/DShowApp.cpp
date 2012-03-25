@@ -172,7 +172,6 @@ void DShowApp::update()
 		LONG lParam2;
 		
 		while ( SUCCEEDED( g_mediaEvent->GetEvent(&lEventCode, &lParam1, &lParam2, 0) ) ) {
-			console() << lEventCode << endl;
 			switch( lEventCode ) {
 			case EC_COMPLETE:
 				// Completed video playback
