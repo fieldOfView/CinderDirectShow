@@ -4,9 +4,8 @@ A proof of concept video player that uses DirectShow (and more specifically the 
 
 The code is mostly based on the custom Allocator/Presenter sample provided in the Microsoft Windows SDK
 
-**Cinder is a peer-reviewed, free, open source C++ library for creative coding.**
+Portions utilize Microsoft Windows Media Technologies.  Copyright (c) 2006 Microsoft Corporation.  All Rights Reserved
 
-To get started with Cinder from github, please read [this document](http://libcinder.org/docs/welcome/GitSetup.html). You might also prefer
-one of our [pre-packaged downloads](http://libcinder.org/download/).
+**Cinder is a peer-reviewed, free, open source C++ library for creative coding.**
 
 Cinder is released under the Modified BSD License.

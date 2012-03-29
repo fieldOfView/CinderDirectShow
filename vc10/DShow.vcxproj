@@ -47,7 +47,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>..\..\..\..\Windows SDK\multimedia\directshow\baseclasses;..\..\..\..\Windows SDK\multimedia\directshow\common;..\include;..\..\..\include;..\..\..\boost</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\baseclasses;..\..\..\include;..\..\..\boost</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -61,8 +61,8 @@
       <AdditionalIncludeDirectories>..\..\..\\include;..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>..\..\..\..\Windows SDK\multimedia\directshow\baseclasses\Debug\strmbasd.lib;winmm.lib;d3d9.lib;cinder_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(DXSDK_DIR)\Lib\x86\;..\..\..\\lib;..\..\..\\lib\msw;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>..\baseclasses\Debug\strmbasd.lib;winmm.lib;d3d9.lib;cinder_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(DXSDK_DIR)\Lib\x86\;..\..\..\lib;..\..\..\lib\msw;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
@@ -76,7 +76,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>..\..\..\..\Windows SDK\multimedia\directshow\baseclasses;..\..\..\..\Windows SDK\multimedia\directshow\common;..\include;..\..\..\\include;..\..\..\\boost</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\baseclasses;..\..\..\include;..\..\..\boost</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <PrecompiledHeader>
@@ -91,8 +91,8 @@
       <AdditionalIncludeDirectories>..\..\..\\include;..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>..\..\..\..\Windows SDK\multimedia\directshow\baseclasses\Release\strmbase.lib;winmm.lib;d3d9.lib;cinder.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(DXSDK_DIR)\Lib\x86\;..\..\..\\lib;..\..\..\\lib\msw;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>..\baseclasses\Release\strmbase.lib;winmm.lib;d3d9.lib;cinder.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(DXSDK_DIR)\Lib\x86\;..\..\..\lib;..\..\..\lib\msw;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <GenerateMapFile>true</GenerateMapFile>
       <SubSystem>Windows</SubSystem>
